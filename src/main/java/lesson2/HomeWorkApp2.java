@@ -6,7 +6,7 @@ public class HomeWorkApp2 {
         isInputNumberPositive(-50);
         System.out.println(isNumberPositive(55));
         printText("Какой хороший день!", 3);
-        System.out.println(isLeapYear(1984));
+        System.out.println(isLeapYear(1948));
     }
 
     public static boolean isSumBetween(int a, int b) {
