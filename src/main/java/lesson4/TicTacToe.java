@@ -4,8 +4,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class TicTacToe {
-    private static final int SIZE = 5;
-    private static final int WIN_SIZE_VALUE = 3;
+    private static final int SIZE = 8;
+    private static final int WIN_SIZE_VALUE = 4;
 
     private static final char DOT_EMPTY = '•';
     private static final char DOT_HUMAN = 'X';
@@ -189,92 +189,30 @@ public class TicTacToe {
 
     private static boolean checkRows(int index, char symbol) {
         return checkMethod(index, 1, symbol);
-//        int winCounter = 0;
-//        for (int i = 0; i < MAP.length; i++) {
-//            if (checkDimension(i, winCounter)) {
-//                if (MAP[index][i] == symbol) {
-//                    winCounter++;
-//                    if (winCounter == WIN_SIZE_VALUE) {
-//                        return true;
-//                    }
-//                } else {
-//                    winCounter = 0;
-//                }
-//            } else {
-//                break;
-//            }
-//        }
-//        return false;
     }
 
 
     private static boolean checkColumns(int index, char symbol) {
         return checkMethod(index, 2, symbol);
-//        int winCounter = 0;
-//        for (int i = 0; i < MAP.length; i++) {
-//            if (checkDimension(i, winCounter)) {
-//                if (MAP[i][index] == symbol) {
-//                    winCounter++;
-//                    if (winCounter == WIN_SIZE_VALUE) {
-//                        return true;
-//                    }
-//                } else {
-//                    winCounter = 0;
-//                }
-//            } else {
-//                break;
-//            }
-//        }
-//        return false;
     }
 
     private static boolean checkDiagonals(int rowNumber, int columnNumber, char symbol) {
-        int winCounter = 0;
+//        int winCounter = 0;
         int delta = rowNumber - columnNumber;
-        int sumIndex = rowNumber + columnNumber;
+//        int sumIndex = rowNumber + columnNumber;
 
         if (delta >= 0) {
-//            return checkMethod(0, 3, symbol);
-            for (int i = 0; i < MAP.length - delta; i++) {
-                if (checkDimension(i, winCounter)) {
-                    if (MAP[i + delta][i] == symbol) {
-                        winCounter++;
-                        if (winCounter == WIN_SIZE_VALUE) {
-                            return true;
-                        }
-                    } else {
-                        winCounter = 0;
-                    }
-                } else {
-                    break;
-                }
-            }
-            if (checkOverlap(sumIndex, symbol)) {
-                return true;
-            }
-        } else {
-//            return checkMethod(0, 4, symbol);
+            return checkMethod(0, 3, symbol);
         }
-        for (int i = 0; i < MAP.length + delta; i++) {
-            if (MAP[i][i - delta] == symbol) {
-                winCounter++;
-                if (winCounter == WIN_SIZE_VALUE) {
-                    return true;
-                }
-            } else {
-                winCounter = 0;
-            }
+        else {
+            return checkMethod(0,4,symbol);
         }
 
-
-        if (checkOverlap(sumIndex, symbol)) {
-            return true;
-        }
-        return false;
     }
 
 
     private static boolean checkMethod(int index, int flag, char symbol) {
+
         int winCounter = 0;
         char c = '?';
         int endCycle = MAP.length;
@@ -322,6 +260,10 @@ public class TicTacToe {
                 break;
             }
         }
+        if (flag == 3 || flag==4 ) {
+           return checkReverse(sumIndex, symbol);
+        }
+
         return false;
     }
 
@@ -344,7 +286,7 @@ public class TicTacToe {
         return (MAP.length - i >= WIN_SIZE_VALUE - winCounter);
     }
 
-    private static boolean checkOverlap(int sumIndex, char symbol) {
+    private static boolean checkReverse(int sumIndex, char symbol) {
 
         int winCounter = 0;
         if (sumIndex <= MAP.length - 1) {
