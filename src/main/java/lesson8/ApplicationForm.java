@@ -166,18 +166,20 @@ public class ApplicationForm extends JFrame {
             if (x >= 0.0) {
                 String str = resultField.getText();
                 if (str.isBlank()) {
-                    sb.append("sqrt(" + inputField.getText() + ")");
+                    sb.append(" sqrt(" + inputField.getText() + ")");
                 } else {
-                    var strArr = str.split("[^0-9\\.sqrt\\(\\)]");
-                    if (strArr.length > 1) {
-                        sb.append(str + "sqrt(" + inputField.getText() + ")");
-                    } else {
-                        sb.append("sqrt(" + str + ")");
+                    if (String.valueOf(str.charAt(str.length()-1)).matches("\\)")){
+                        String lastValue = splitString(str);
+                        sb.append(str.substring(0,str.length()-lastValue.length()));
+                        sb.append(" sqrt(" + lastValue + ")");
+                    }else {
+                        sb.append(str + " sqrt(" + inputField.getText() + ")");
                     }
                 }
 //                String res = (Math.sqrt(x) % 1 == 0) ? String.format("%.0f", Math.sqrt(x)) : String.format("%.4f", Math.sqrt(x)).replace(',', '.');
                 inputField.setText(String.valueOf(Math.sqrt(x)));
                 resultField.setText(sb.toString());
+                lastOperation = true;
             } else {
                 resultField.setText("");
                 inputField.setText("Error");
@@ -194,17 +196,19 @@ public class ApplicationForm extends JFrame {
             Double x = Double.parseDouble(inputField.getText());
             String str = resultField.getText();
             if (str.isBlank()) {
-                sb.append("sqr(" + inputField.getText() + ")");
+                sb.append(" sqr(" + inputField.getText() + ")");
             } else {
-                var strArr = str.split("[^0-9\\.sqrt\\(\\)]");
-                if (strArr.length > 1) {
-                    sb.append(str + "sqr(" + inputField.getText() + ")");
-                } else {
-                    sb.append("sqr(" + str + ")");
+                if (String.valueOf(str.charAt(str.length()-1)).matches("\\)")){
+                    String lastValue = splitString(str);
+                    sb.append(str.substring(0,str.length()-lastValue.length()));
+                    sb.append(" sqr(" + lastValue + ")");
+                }else {
+                    sb.append(str + " sqr(" + inputField.getText() + ")");
                 }
             }
             inputField.setText(String.valueOf(Math.pow(x, 2)));
             resultField.setText(sb.toString());
+            lastOperation = true;
         });
         mainPanel.add(sqr);
 
@@ -241,6 +245,11 @@ public class ApplicationForm extends JFrame {
         }
         bottom.add(mainPanel, BorderLayout.CENTER);
         return bottom;
+    }
+
+    private String splitString(String str) {
+        var strArr = str.split("[^0-9sqrt\\.\\(\\)]");
+        return strArr[strArr.length-1];
     }
 
     private void fontsInit() {
@@ -335,7 +344,7 @@ public class ApplicationForm extends JFrame {
                 inputField.setText("");
                 setOperandX(0.0);
                 setOperation("-");
-                resultField.setText("0-");
+                resultField.setText("0 - ");
             }
         }
     }
@@ -381,12 +390,12 @@ public class ApplicationForm extends JFrame {
         }
         if (!str.isBlank()) {
             if (str.charAt(str.length() - 1) != ')') {
-                resultField.setText(resultField.getText() + checkCorrectInput(value) + operator);
+                resultField.setText(resultField.getText() + " " + checkCorrectInput(value) + " " + operator);
             } else {
-                resultField.setText(resultField.getText() + operator);
+                resultField.setText(resultField.getText() + " " + operator);
             }
         } else {
-            resultField.setText(resultField.getText() + checkCorrectInput(value) + operator);
+            resultField.setText(resultField.getText() + " " + checkCorrectInput(value) + " " + operator);
         }
         setOperation(operator);
 
@@ -430,7 +439,7 @@ public class ApplicationForm extends JFrame {
         if (lastOperation) {
             if (!str.isBlank()) {
                 if (String.valueOf(str.charAt(str.length() - 1)).matches("[^0-9\\)]")) {
-                    resultField.setText(str.substring(0, str.length() - 1) + operator);
+                    resultField.setText(str.substring(0, str.length() - 1) + " " + operator);
                     setOperation(operator);
                     return true;
                 }
